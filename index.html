@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Print</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 400px;
+  margin: auto;
+  background: #ffffff;
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+  text-align: center;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-top: 15px;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.radio-group label {
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+button {
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+#message {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  display: none;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🖨️ Smart Print</h2>
+
+  <form id="printForm">
+    <label>Upload PDF / Image</label>
+    <input type="file" name="file" accept=".pdf,image/*">
+
+    <label>Print Type</label>
+    <div class="radio-group">
+      <label><input type="radio" name="printType" value="bw" checked> Black & White</label>
+      <label><input type="radio" name="printType" value="color"> Color</label>
+    </div>
+
+    <label>Number of Copies</label>
+    <input type="number" name="copies" value="1" min="1">
+
+    <label>Pages</label>
+    <select name="pages">
+      <option value="all">All Pages</option>
+      <option value="range">Page Range</option>
+    </select>
+
+    <label>Paper Size</label>
+    <select name="paperSize">
+      <option value="A4">A4</option>
+      <option value="Legal">Legal</option>
+    </select>
+
+    <label>Binding (Optional)</label>
+    <select name="binding">
+      <option value="None">None</option>
+      <option value="Spiral">Spiral</option>
+      <option value="Staple">Staple</option>
+    </select>
+
+    <button type="button" onclick="submitOrder()">DONE</button>
+    
+    <div id="message"></div>
+  </form>
+
+</div>
+
+<script>
+function submitOrder() {
+  // Redirect to Order Received page
+  window.location.href = 'order-received.html';
+}
+</script>
+
+</body>
+</html>
