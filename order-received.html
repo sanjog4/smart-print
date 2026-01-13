@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Received</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #e8f5e9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.message-container {
+  text-align: center;
+  padding: 40px;
+}
+
+.success-icon {
+  font-size: 100px;
+  margin-bottom: 20px;
+}
+
+.success-text {
+  font-size: 48px;
+  font-weight: bold;
+  color: #2e7d32;
+  margin-bottom: 30px;
+}
+
+.redirect-text {
+  font-size: 18px;
+  color: #666;
+}
+</style>
+</head>
+<body>
+
+<div class="message-container">
+  <div class="success-icon">✅</div>
+  <div class="success-text">Order Received</div>
+  <div class="redirect-text">Redirecting back in <span id="countdown">3</span> seconds...</div>
+</div>
+
+<script>
+let seconds = 3;
+const countdownElement = document.getElementById('countdown');
+
+const interval = setInterval(() => {
+  seconds--;
+  countdownElement.textContent = seconds;
+  
+  if (seconds <= 0) {
+    clearInterval(interval);
+    window.close();
+    // If window.close() doesn't work (some browsers block it), redirect back
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 100);
+  }
+}, 1000);
+</script>
+
+</body>
+</html>
