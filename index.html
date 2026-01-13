@@ -1,138 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Print</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Print</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
-  margin: 0;
-  padding: 0;
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-.container {
-  max-width: 400px;
-  margin: auto;
-  background: #ffffff;
-  padding: 20px;
-  margin-top: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
 
-h2 {
-  text-align: center;
-}
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-label {
-  font-weight: bold;
-  display: block;
-  margin-top: 15px;
-}
+        .header h1 {
+            color: #333;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
 
-input, select, button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 8px;
-  font-size: 16px;
-}
+        .printer-icon {
+            font-size: 40px;
+        }
 
-.radio-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 8px;
-}
+        .form-group {
+            margin-bottom: 25px;
+        }
 
-.radio-group label {
-  font-weight: normal;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 16px;
+        }
 
-button {
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-top: 20px;
-}
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
 
-button:hover {
-  background: #0056b3;
-}
+        input[type="file"]:hover {
+            border-color: #667eea;
+        }
 
-#message {
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 8px;
-  display: none;
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-}
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
 
-.success {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-}
-</style>
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            background: white;
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 30px;
+            margin-top: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .backend-status {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .backend-status.online {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .backend-status.offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .printer-icon {
+                font-size: 30px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span class="printer-icon">🖨️</span>
+                Smart Print
+            </h1>
+        </div>
 
-<div class="container">
-  <h2>🖨️ Smart Print</h2>
+        <div id="backendStatus" class="backend-status">Checking connection...</div>
+        <div id="message" class="message"></div>
 
-  <form id="printForm">
-    <label>Upload PDF / Image</label>
-    <input type="file" name="file" accept=".pdf,image/*">
+        <form id="printForm">
+            <div class="form-group">
+                <label for="file">Upload PDF / Image</label>
+                <input type="file" id="file" name="file" accept=".pdf,.jpg,.jpeg,.png" required>
+            </div>
 
-    <label>Print Type</label>
-    <div class="radio-group">
-      <label><input type="radio" name="printType" value="bw" checked> Black & White</label>
-      <label><input type="radio" name="printType" value="color"> Color</label>
+            <div class="form-group">
+                <label>Print Type</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="bw" name="printType" value="bw" checked>
+                        <label for="bw">Black & White</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="color" name="printType" value="color">
+                        <label for="color">Color</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="copies">Number of Copies</label>
+                <input type="number" id="copies" name="copies" min="1" max="100" value="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pages">Pages</label>
+                <select id="pages" name="pages" required>
+                    <option value="all">All Pages</option>
+                    <option value="custom">Custom Range</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="paperSize">Paper Size</label>
+                <select id="paperSize" name="paperSize" required>
+                    <option value="A4">A4</option>
+                    <option value="Letter">Letter</option>
+                    <option value="Legal">Legal</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="binding">Binding (Optional)</label>
+                <select id="binding" name="binding">
+                    <option value="none">None</option>
+                    <option value="staple">Staple</option>
+                    <option value="spiral">Spiral Binding</option>
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn">DONE</button>
+        </form>
     </div>
 
-    <label>Number of Copies</label>
-    <input type="number" name="copies" value="1" min="1">
+    <script>
+        // Backend URL - UPDATE THIS BASED ON DEPLOYMENT
+        // For PythonAnywhere: https://YOUR_USERNAME.pythonanywhere.com
+        // For Local Network: http://192.168.1.8:5000
+        // For Ngrok: https://YOUR_NGROK_URL.ngrok.io
+        const BACKEND_URL = 'https://YOUR_USERNAME.pythonanywhere.com';  // ⚠️ CHANGE THIS
 
-    <label>Pages</label>
-    <select name="pages">
-      <option value="all">All Pages</option>
-      <option value="range">Page Range</option>
-    </select>
+        // Check backend connection on page load
+        async function checkBackendConnection() {
+            const statusDiv = document.getElementById('backendStatus');
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/health`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'omit'  // Don't send cookies for CORS
+                });
+                if (response.ok) {
+                    statusDiv.textContent = '✅ Connected to backend server';
+                    statusDiv.className = 'backend-status online';
+                } else {
+                    throw new Error('Backend not responding');
+                }
+            } catch (error) {
+                statusDiv.textContent = '⚠️ Backend offline - Orders won\'t be saved';
+                statusDiv.className = 'backend-status offline';
+            }
+        }
 
-    <label>Paper Size</label>
-    <select name="paperSize">
-      <option value="A4">A4</option>
-      <option value="Legal">Legal</option>
-    </select>
+        // Check connection when page loads
+        checkBackendConnection();
 
-    <label>Binding (Optional)</label>
-    <select name="binding">
-      <option value="None">None</option>
-      <option value="Spiral">Spiral</option>
-      <option value="Staple">Staple</option>
-    </select>
+        // Handle form submission
+        document.getElementById('printForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-    <button type="button" onclick="submitOrder()">DONE</button>
-    
-    <div id="message"></div>
-  </form>
+            const messageDiv = document.getElementById('message');
+            const submitBtn = document.querySelector('.submit-btn');
 
-</div>
+            // Get form data
+            const formData = new FormData();
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
 
-<script>
-function submitOrder() {
-  // Redirect to Order Received page
-  window.location.href = 'order-received.html';
-}
-</script>
+            if (!file) {
+                showMessage('Please select a file', 'error');
+                return;
+            }
 
+            // Add file and form data
+            formData.append('file', file);
+            formData.append('printType', document.querySelector('input[name="printType"]:checked').value);
+            formData.append('copies', document.getElementById('copies').value);
+            formData.append('pages', document.getElementById('pages').value);
+            formData.append('paperSize', document.getElementById('paperSize').value);
+            formData.append('binding', document.getElementById('binding').value);
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            try {
+                // Send to backend
+                const response = await fetch(`${BACKEND_URL}/api/submit-order`, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'cors',
+                    credentials: 'omit'  // Don't send cookies for CORS
+                    // Note: Don't set Content-Type header - browser sets it automatically for FormData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    showMessage('Order submitted successfully! Order ID: ' + result.orderId, 'success');
+                    
+                    // Redirect to confirmation page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'order-received.html';
+                    }, 2000);
+                } else {
+                    throw new Error('Failed to submit order');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error: Could not connect to backend server. Make sure the server is running on your PC.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'DONE';
+            }
+        });
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+    </script>
 </body>
 </html>
